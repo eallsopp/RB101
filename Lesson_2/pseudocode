@@ -1,0 +1,110 @@
+I need  aclculator program that asks for 2 numbers
+it asks for the operation to be performed
+perform the operation on the two numbers
+displays the result
+
+use Kernel.gets() to retrieve input
+use Kernel.puts() to display output
+#Recall Kernel.gets() includes the newline, so you have to call chomp() to remove it:
+#Kernel.gets().chomp()
+
+START
+SET
+GET
+PRINT
+READ
+IF / ELSE IF / ELSE
+WHILE
+END
+
+
+START
+
+# Given a collection of integers called "numbers"
+
+SET iterator = 1
+SET saved_number = value within numbers collection at space 1
+
+WHILE iterator <= length of numbers
+  SET current_number = value within numbers collection at space "iterator"
+  IF saved_number >= current_number
+    go to the next iteration
+  ELSE
+    saved_number = current_number
+
+  iterator = iterator + 1
+
+PRINT saved_number
+
+END
+REMEMBER, PSEUDOCODE is a GUESS at what will work, you cannot test its logic until it
+is in a program
+
+Practice:
+A method that returns the sum of two integers
+A Method definition, sum of two integers
+  Where do the integers come from? (user, array, hash symbol? local variables, etc...)
+  
+START
+  # a method that returns the sum of two integers
+  SET Integer1
+  GET Integer2 (must be returned as an integer
+  
+  
+  PRINT "The result of the addition is the sum of Integer1 and Integer2
+  READ Integer1 Integer2
+  END
+  
+A method that takes an array of strings and returns a string that is all those strings
+concatenated together
+START
+SET Variable = array, which will be a set of strings
+
+WHILE iterator <= length of the array
+PRINT ARRAYs1 + ARRAYs2 + ARRAYs3 etc...
+
+READ All of the strings will be concatenated together.
+END
+
+
+A method that takes an array of integers and returns a 
+new array with every other element.
+START 
+SET VARIABLE = array
+SET VARIABLE = odd_numbers
+  WHILE array <= length of array
+    SET array = iterate through each number in the array |each| each_with_index[x] 
+    IF  x.odd?
+       odd_numbers << number.index[x] 
+    ELSE
+      go to the next iteration
+      
+      
+PRINT an array that consists of every other integer variable
+READ every other variable in the array of integers
+END
+
+
+while user wants to keep going
+  - ask the user for a collection of numbers
+  - extract the largest one from that collection and save it
+  - ask the user if they want to input another collection
+
+return saved list of numbers
+
+
+START
+SET
+GET
+PRINT
+READ
+IF / ELSE IF / ELSE
+WHILE
+END
+
+Stringy Strings
+START 
+SET METHOD DEFINITION STRINGY(SINGLE ARGUMENT)
+GET STRING of 101010 that matches the length of the integer given
+print STRING OF 1's and 0's matching the value of the integer, always starts with 1
+READ TRUE or False (could be ternary operator)

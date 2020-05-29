@@ -1,0 +1,17 @@
+
+welcome: Welcome to the Monthly Payment Calculator!
+welcome2: "Let's gather some information from you."
+loan_amount: "What is the total amount of the loan in dollars?"
+loan_amount_error: "Your loan amount is invalid.  Please try another dollar amount."
+invalid_input: "Sorry that number is invalid.  Please try a new value."
+total_loan_amount: "Thank you for the total loan amount."
+apr: "What is the Annual Percentage Rate (APR) of the loan?"
+apr_error: "Your APR is invalid.  Please enter a valid annual rate of 1 or greater."
+duration: "What is the duration of the loan in months?"
+duration_error: "Invalid input.  Your input should be a whole number." 
+months: "Months = years * 12"
+
+final_value: "Your total monthly payment will be: "
+calculate_again?: "Would you like to calculate another loan?  (Y/N?)."
+invalid_exit: "Sorry, that is not a valid input.  Yes or No?"
+goodbye: "Thank you for calculating your APR.  Goodbye!"

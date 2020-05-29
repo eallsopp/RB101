@@ -1,0 +1,9 @@
+
+welcome: Welcome to the Rock Paper Scissors Lizard Spock Human Computer Championship!
+match: "This will be a match to 5 wins."
+invalid: "That is not a valid choice. Please pick again."
+player: "You win!"
+computer: "Computer won!"
+tie: "It's a tie!"
+play_again: "Would you like to play again? (y/n)"
+goodbye: "Thanks for playing.  Goodbye!"
