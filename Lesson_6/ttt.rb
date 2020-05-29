@@ -6,7 +6,7 @@ COMPUTER_MARKER = 'O'
 WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] +
                   [[2, 5, 8], [1, 4, 7], [3, 6, 9]] +
                   [[1, 5, 9], [3, 5, 7]]
-WHO_GOES_FIRST = 'Choose'
+WHO_GOES_FIRST = ['player', 'computer']
 
 def prompt(msg)
   puts "=> #{msg}"
@@ -115,9 +115,6 @@ def who_goes_first?
     "Invalid number. Please try again. (1, 2, or 3)"
   end
 end
-    
-  
- 
 
 =end
 
@@ -248,7 +245,6 @@ loop do  # do you want to play again loop
       clear
       display_board(board)
       display_scoreboard(total_player_wins, total_computer_wins)
-
 
 # if the return value is 1, this is the right format
       player_places_piece!(board)
