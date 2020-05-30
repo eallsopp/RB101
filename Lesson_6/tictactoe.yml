@@ -1,10 +1,11 @@
-
 welcome: 'Welcome to Digital Tic-Tac-Toe!'
 who_goes_first: "Who would you like to go first?"
 player_choice: "Press 1 for: player. Press 2 for: computer.  Press 3 for either."
 invalid_start_choice: "That is an invalid choice. Please choose a 1, 2 or 3."
+choose: 'Would you like to choose who moves first? (Y/N?)'
+choose_validate: 'Sorry, please type Y for Yes, or N for No.'
 invalid_square: 'Sorry, that is not a valid square.'
-tie: 'It\'s a tie!!'
+tie: "It's a tie!!"
 play_again: 'Would you like to play again? (Y/N?)'
 invalid_play_again: 'Sorry, I did not catch that.  Please input Yes or No.'
 thank_you: "Thank you for playing!"
