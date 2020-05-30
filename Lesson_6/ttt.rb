@@ -1,6 +1,4 @@
 require 'pry'
-require 'yaml'
-MESSAGE = YAML.load_file('tictactoe.yml')
 
 INITIAL_MARKER =  ' '
 PLAYER_MARKER = 'X'
