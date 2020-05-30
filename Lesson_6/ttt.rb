@@ -1,4 +1,6 @@
 require 'pry'
+require 'yaml'
+MESSAGE = YAML.load_file('tictactoe.yml')
 
 INITIAL_MARKER =  ' '
 PLAYER_MARKER = 'X'
@@ -18,7 +20,7 @@ end
 
 # rubocop:disable Metrics/MethodLength, Metrics/Abcsize
 def display_board(brd)
-  prompt "You are a #{PLAYER_MARKER} and computer is #{COMPUTER_MARKER}"
+  prompt "Player is #{PLAYER_MARKER}.  Computer is #{COMPUTER_MARKER}"
 puts ''
 puts '     |     |'
 puts "  #{brd[1]}  |  #{brd[2]}  |  #{brd[3]}"
@@ -31,7 +33,6 @@ puts '-----+-----+-----'
 puts '     |     |'
 puts "  #{brd[7]}  |  #{brd[8]}  |  #{brd[9]}"
 puts '     |     |'
-puts ''
 end
 # rubocop:enable MEtrics/MethodLength, Metrics/Abcsize
 
@@ -46,92 +47,33 @@ def empty_squares(brd) # inspects but doesn't modify the board
   brd.keys.select { |num| brd[num] == INITIAL_MARKER }
 end
 
-=begin
-PEDAC
-  1. Create a choice for the player to have themselves or the computer go first
-  1a. OR give it a random choice between the two
-  2.  Make this a constant called WHO_GOES_FIRST
-    This could be a hash value if it is 1, 2, 3 and 1 2 3 have values of player, computer, random
-  3.  Make it so that choose is a constant that determines to see who goes first
-  
-E:xample
-  "Who would you like to go first?"
-  Input 1: for Player
-  Input 2: for Computer
-  Input 3: for either Player/Computer
-  
-D:ata
-  WHO_GOES_FIRST is a constant Data STructure (an Array) that contains the values of Player and computer
-    Inputs are taken at the beginning of the game
-    v Input 1 is Player
-      Input 2 is Computer
-      Input 3 is either input 1 or input 2
-  Output: 
-    Determines player_chooses_square is first 
-    OR
-    Computer)chooses_square is first
-  
-A:lgorithim
-  Initiate a CONSTANT: WHO_GOES_FIRST
-    The constant is an array that contains 2 values, Player and Computer
-    The constant is referred to from an INPUT from USER at the beginnin of the game
-    The choice then relates to 
-      the method definition who goes first 
-        break if 1 is chosen the object in WHO_GOES_FIRST[0] will be chosen
-        break if 2 is chosen the object in wGH[1] will be chosen
-        break if 3 is chosen the obect in WHF.sample will be chosen at random
-        Validation step if anything aside from 1-3 is chosen
-          prompt "Invalid entry.  Who goes first?  1, 2 or 3?
-          
-  If 1 is chosen, the format of the game remains within the existing programming 
-  If 2 is chosen, the format is opposite
-  If 3 is chosen, 1 of the 2 above formats are randomly chosen
-    The ebst way to contain this is a method definition for 
-      Player1 goes first
-      Player2 goes first
-  
-def who_goes_first?
-  prompt "Who would you like to go first: "
-  prompt "Press 1 for: #{WHO_GOES_FIRST[0]}, Press 2 for: #{WHO_GOES_FIRST[1]}, Press 3 for Random."
-  choice = gets.chomp.to_i
-  
-  case choice
-  when 1 
-      player_places_piece!(board)
-      break if someone_won?(board) || board_full?(board)
+def who_goes_first
+  prompt(MESSAGE['who_goes_first'])
+  loop do 
+    prompt(MESSAGE['player_choice'])
+    choice = gets.chomp.to_i
+    return 'player' if choice == 1
+    return 'computer' if choice == 2
+    return [WHO_GOES_FIRST[0], WHO_GOES_FIRST[1]].sample if choice == 3
+    prompt(MESSAGE['invalid_start_choice'])
+   end
+end
 
-      computer_places_piece!(board)
-      break if someone_won?(board) || board_full?(board)
-
-  when 2
-    loop do
-      computer_places_piece!(board)
-      break if someone_won?(board) || board_full?(board)
-
-      player_places_piece!(board)
-      break if someone_won?(board) || board_full?(board)
-    end  
+def alternate_player(current_player)
+  if current_player == 'player'
+    'computer'
   else
-    "Invalid number. Please try again. (1, 2, or 3)"
+    'player'
   end
 end
 
-=end
-
-def who_goes_first?
-  prompt "Who would you like to go first: "
-  loop do 
-    choice = gets.chomp.to_i
-    prompt "Press 1 for: #{WHO_GOES_FIRST[0]}, Press 2 for: #{WHO_GOES_FIRST[1]}."
-    return 'Player' if choice == 1
-    return 'Computer' if choice == 2
-    break if choice == 1 || choice == 2
-    prompt "That is an invalid choice. Please choose a 1 or 2."
+def place_piece!(board, current_player)
+  if current_player == 'player'
+    player_places_piece!(board)
+  else
+    computer_places_piece!(board)
   end
-  
-  
-  # within this method definition I need to contain the choice that defines the sequence to go first
-  
+end
 
 def player_places_piece!(brd)
   square = ''
@@ -139,7 +81,7 @@ def player_places_piece!(brd)
     prompt "Choose a position to place a piece: #{joinor(empty_squares(brd))}"
     square = gets.chomp.to_i
     break if empty_squares(brd).include?(square)
-    prompt 'Sorry, that is not a valid choice.'
+    prompt(MESSAGE['invalid_square'])
   end
 
   brd[square] = PLAYER_MARKER # set the value of the square a player chooses
@@ -181,11 +123,19 @@ def find_at_risk_square(line, board, marker)
 end
 
 def board_full?(brd)
-  empty_squares(brd) == []
+  empty_squares(brd).empty?
 end
 
 def someone_won?(brd)
   !!detect_winner(brd)
+end
+
+def victory_achieved(board)
+  if someone_won?(board)
+    return prompt "#{detect_winner(board)} won the game!"
+  else
+    prompt(MESSAGE['tie'])
+  end
 end
 
 def detect_winner(brd)
@@ -199,6 +149,16 @@ def detect_winner(brd)
   nil # why do we write nil here, instead of end? the returns are manually input
 end
 
+def score_count(board, score)
+  if detect_winner(board) == 'Player'
+    score[:player] += 1
+  elsif detect_winner(board) == 'Computer'
+    score[:computer] += 1 
+  else
+    0
+  end
+end
+
 def joinor(arr, delimiter=', ', word='or')
   case arr.size
     when 0 then ''
@@ -210,72 +170,59 @@ def joinor(arr, delimiter=', ', word='or')
   end
 end
 
-def display_scoreboard(total_player_wins, total_computer_wins)
+def display_scoreboard(score)
   output = "-" * 22
   puts output
-  puts 'Scores'.center(22)
-  puts "Player: #{total_player_wins} Computer: #{total_computer_wins}"
+  puts 'Score of Match'.center(22)
+  puts "Player: #{score[:player]} Computer: #{score[:computer]}"
   puts output
 end
       
 def play_again?
   loop do
-    prompt 'Would you like to play again? (Y/N?)'
+    prompt(MESSAGE['play_again?'])
     answer = gets.chomp.downcase
     if answer.include?('yes') || answer.include?('y')
       return true
     elsif answer.include?('no') || answer.include?('n')
       return false
     else
-        prompt 'Sorry, I did not catch that.  Please input Yes or No.'
+        prompt(MESSAGE['invalid_play_again'])
     end
   end
 end
 
-
+prompt(MESSAGE['welcome'])
 loop do  # do you want to play again loop
   
-  total_player_wins = 0
-  total_computer_wins = 0
+  score = { player: 0, computer: 0}
+  current_player = nil
   
   loop do # match play loop
-    board = initialize_board # keys represent a square on the board
+    board = initialize_board 
+    current_player = who_goes_first
     
-    loop do # take turns loop
-      clear
+    # take turns loop
+    loop do
       display_board(board)
-      display_scoreboard(total_player_wins, total_computer_wins)
-
-# if the return value is 1, this is the right format
-      player_places_piece!(board)
-      break if someone_won?(board) || board_full?(board)
-
-      computer_places_piece!(board)
+      display_scoreboard(score)
+      place_piece!(board, current_player)
+      current_player = alternate_player(current_player)
       break if someone_won?(board) || board_full?(board)
     end
 
     display_board(board)
-
-    if someone_won?(board)
-      prompt "#{detect_winner(board)} won!"
-    else
-      prompt 'It\'s a tie!!'
-    end
-
+    victory_achieved(board)
+    
     sleep(1.75)
     
-    if detect_winner(board) == 'Player'
-      total_player_wins += 1
-    elsif detect_winner(board) == 'Computer'
-      total_computer_wins += 1
-    end
-    
-    display_scoreboard(total_player_wins, total_computer_wins)
-    break if total_player_wins == 5 || total_computer_wins == 5
+    score_count(board, score)
+    display_scoreboard(score)
+    break if score[:player] == 5 || score[:computer] == 5
   end
   
   break unless play_again?
 end
 
-prompt 'Thanks for playing Ruby Tic Tac Toe!'
-prompt 'Goodbye.'
+prompt(MESSAGE['thank_you'])
+prompt(MESSAGE['goodbye'])
