@@ -1,4 +1,6 @@
 require 'pry'
+require 'yaml'
+MESSAGE = YAML.load_file('tictactoe.yml')
 
 INITIAL_MARKER =  ' '
 PLAYER_MARKER = 'X'
@@ -55,6 +57,39 @@ def who_goes_first
     return [WHO_GOES_FIRST[0], WHO_GOES_FIRST[1]].sample if choice == 3
     prompt "That is an invalid choice. Please choose a 1, 2 or 3."
    end
+end
+
+def choose_who_goes_first
+  loop do
+    prompt "Would you like to choose who moves first? (Y/N?)"
+    input = gets.chomp.upcase
+    if input == "Y" || input == "N"
+      break
+    else
+      prompt "Sorry, please type Y for Yes, or N for No."
+    end
+  end
+end
+
+
+def default_player(player)
+=begin
+P:
+Create a way for WHOGOESFIRST = 'Choose' will give the optio for the user to choose = nil or choose player/computer
+D
+input - a local variable for the method definiiton that will yield a choice either yes or no
+  output
+    if the input is yes then initiate who goes first
+  else
+    default_playe
+
+would you like to choose who goes first?  y/n?
+input = gets.chomp
+  if input == y
+    who_goes_first
+  else
+    choice
+=end
 end
 
 def alternate_player(current_player)
@@ -190,7 +225,7 @@ def play_again?
   end
 end
 
-prompt "Welcome to Digital Tic-Tac-Toe!"
+prompt(MESSAGE['welcome'])
 loop do  # do you want to play again loop
   
   score = { player: 0, computer: 0}
@@ -202,6 +237,7 @@ loop do  # do you want to play again loop
     
     # take turns loop
     loop do
+      clear
       display_board(board)
       display_scoreboard(score)
       place_piece!(board, current_player)
@@ -216,6 +252,7 @@ loop do  # do you want to play again loop
     
     score_count(board, score)
     display_scoreboard(score)
+    sleep(1.75)
     break if score[:player] == 5 || score[:computer] == 5
   end
   
