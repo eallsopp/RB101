@@ -48,14 +48,14 @@ def empty_squares(brd) # inspects but doesn't modify the board
 end
 
 def who_goes_first
-  prompt(MESSAGE['who_goes_first'])
+  prompt "Who would you like to go first?"
   loop do 
-    prompt(MESSAGE['player_choice'])
+    prompt "Press 1 for: player. Press 2 for: computer.  Press 3 for either."
     choice = gets.chomp.to_i
     return 'player' if choice == 1
     return 'computer' if choice == 2
     return [WHO_GOES_FIRST[0], WHO_GOES_FIRST[1]].sample if choice == 3
-    prompt(MESSAGE['invalid_start_choice'])
+    prompt "That is an invalid choice. Please choose a 1, 2 or 3."
    end
 end
 
@@ -81,7 +81,7 @@ def player_places_piece!(brd)
     prompt "Choose a position to place a piece: #{joinor(empty_squares(brd))}"
     square = gets.chomp.to_i
     break if empty_squares(brd).include?(square)
-    prompt(MESSAGE['invalid_square'])
+    prompt 'Sorry, that is not a valid choice.'
   end
 
   brd[square] = PLAYER_MARKER # set the value of the square a player chooses
@@ -132,9 +132,9 @@ end
 
 def victory_achieved(board)
   if someone_won?(board)
-    return prompt "#{detect_winner(board)} won the game!"
+    return prompt "#{detect_winner(board)} won!"
   else
-    prompt(MESSAGE['tie'])
+    prompt 'It\'s a tie!!'
   end
 end
 
@@ -180,19 +180,19 @@ end
       
 def play_again?
   loop do
-    prompt(MESSAGE['play_again?'])
+    prompt 'Would you like to play again? (Y/N?)'
     answer = gets.chomp.downcase
     if answer.include?('yes') || answer.include?('y')
       return true
     elsif answer.include?('no') || answer.include?('n')
       return false
     else
-        prompt(MESSAGE['invalid_play_again'])
+        prompt 'Sorry, I did not catch that.  Please input Yes or No.'
     end
   end
 end
 
-prompt(MESSAGE['welcome'])
+prompt "Welcome to Digital Tic-Tac-Toe!"
 loop do  # do you want to play again loop
   
   score = { player: 0, computer: 0}
@@ -224,5 +224,5 @@ loop do  # do you want to play again loop
   break unless play_again?
 end
 
-prompt(MESSAGE['thank_you'])
-prompt(MESSAGE['goodbye'])
+prompt 'Thanks for playing Ruby Tic Tac Toe!'
+prompt 'Goodbye.'
