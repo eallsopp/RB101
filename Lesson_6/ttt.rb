@@ -1,4 +1,5 @@
 require 'yaml'
+require 'pry'
 MESSAGE = YAML.load_file('tictactoe.yml')
 
 INITIAL_MARKER =  ' '.freeze
@@ -17,7 +18,7 @@ def clear
   system 'clear'
 end
 
-# rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+# rubocop:disable Metrics/AbcSize
 def display_board(brd)
   prompt "Player is #{PLAYER_MARKER}.  Computer is #{COMPUTER_MARKER}"
   puts ''
@@ -33,7 +34,7 @@ def display_board(brd)
   puts "  #{brd[7]}  |  #{brd[8]}  |  #{brd[9]}"
   puts '     |     |'
 end
-# rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+# rubocop:enable Metrics/AbcSize
 
 def initialize_board
   new_board = {}
@@ -101,30 +102,37 @@ def player_places_piece!(brd)
 end
 
 def computer_places_piece!(brd)
-  square = nil
-  WINNING_LINES.each do |line|
-    square = find_at_risk_square(line, brd, COMPUTER_MARKER)
-    break if square
-  end
+  defensive_square = computer_strategy(brd, COMPUTER_MARKER)
+  offensive_square = computer_strategy(brd, PLAYER_MARKER)
 
-  unless square
-    WINNING_LINES.each do |line|
-      square = find_at_risk_square(line, brd, PLAYER_MARKER)
-      break if square
-    end
-  end
-
-  unless square
-    if empty_squares(brd).include?(5)
-      square = 5
-    end
-  end
-
-  unless square
-    square = empty_squares(brd).sample
-  end
+  square = if defensive_square
+             defensive_square
+           elsif offensive_square
+             offensive_square
+           elsif pick_five(brd)
+             pick_five(brd)
+           else
+             pick_random_square(brd)
+           end
 
   brd[square] = COMPUTER_MARKER
+end
+
+def computer_strategy(brd, marker)
+  square = nil
+  WINNING_LINES.each do |line|
+    square = find_at_risk_square(line, brd, marker)
+    break if square
+  end
+  square
+end
+
+def pick_five(brd)
+  return 5 if empty_squares(brd).include?(5)
+end
+
+def pick_random_square(brd)
+  empty_squares(brd).sample
 end
 
 def find_at_risk_square(line, board, marker)
@@ -157,7 +165,7 @@ def detect_winner(brd)
       return 'Computer'
     end
   end
-  nil # why do we write nil here, instead of end? the returns are manually input
+  nil
 end
 
 def score_count(board, score)
@@ -221,6 +229,7 @@ loop do # do you want to play again loop
       break if someone_won?(board) || board_full?(board)
     end
 
+    clear
     display_board(board)
     victory_achieved(board)
 
