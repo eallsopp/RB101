@@ -1,3 +1,4 @@
+require 'pry'
 =begin
 # Short Long Short
 # Write a method that takes two strings as arguments, determines the longer of the two
@@ -43,72 +44,20 @@ Write a ethod that takes a year as an input an returns the century.  Return valu
 a string that begins with the century number and ends with st, nd, rd, th as appropriate for the number
 New centuries begin in years that end with 01, so 2000, is the 20th century
 
-P:roblem
-  Take an integer value and convert it to a certain century 'String'
-  Integer is always positive
-  A century is defined as the year __01 - +1_00
-    EXP: 2000 is 20th century, 2001 is 21st century
-  Values defined with single integers up to 100 are 1st century
-  
-E:xample
-  4 is the '1st' 
-  1087 is the '11th' up to 20th, 2104 is '21st' century
-  1127 is the '12th'
-  11201 is the '113th' (again, another  112 is 113st, not 113rd)
-    
-D:ata
-  Numbers correspond here with 1st, 2nd, 3rd  4-20 all end in 'th' until 21st
-  Input
-    Integer value corresponding to a year
-  Output
-    "String Value corresponding to a century" + 'st', 'nd', 'rd' 'th'
-      depending on the numerical value
-
-  
-A:lgorithim  
-  initiate a method definition with a parameter
-    take a value 
-
-Convert a number toa century value
-  case statement for the suffix of the value
-  
-  values ending in 1 are suffixed with 'st'
-  values ending in 2 are suffixed with 'nd'
-  values ending in 3 are suffixed with 'rd'
-  with the exception of from 4 to 20 every 100 years 
-    4..20 ends with 'th'
-=end
-
-def century(year)
-  century = year / 100 + 1
-  century -= 1 if year % 100 == 0
-  century.to_s + century_suffix(century)
-end
-
-def century_suffix(century)
-  return 'th' if [11, 12, 13].include?(century % 100)
-  last_digit = century % 10
-
-  case last_digit
-  when 1 then 'st'
-  when 2 then 'nd'
-  when 3 then 'rd'
-  else 'th'
-  end
-end
-
-puts century(2000) == '20th'
-puts century(2001) == '21st'
-puts century(1965) == '20th'
-puts century(256) == '3rd'
-puts century(5) == '1st'
-puts century(10103) == '102nd'
-puts century(1052) == '11th'
-puts century(1127) == '12th'
-puts century(11201) == '113th'
 
 
-=begin
+
+century(2000) == '20th'
+century(2001) == '21st'
+century(1965) == '20th'
+century(256) == '3rd'
+century(5) == '1st'
+century(10103) == '102nd'
+century(1052) == '11th'
+century(1127) == '12th'
+century(11201) == '113th'
+
+
 #Lear Year? Part 1a leap year occurs every year divisible cleanly by 4unless the number is divisible by 100, then it isnt unless its divisible by 400
 Assume its good for any year greater than 0
 WRite a method that takes any year gretaer than 0 as an input and returns true if it is a leap year, false if not
@@ -348,7 +297,7 @@ A:lgorthim
       
     Considerations: each value can be determined
   value
-
+=end
 DIGITS = {'0' => 0, '1' => 1, '2'=> 2, '3'=> 3, '4'=> 4, 
 '5'=> 5, '6'=> 6, '7'=> 7, '8'=> 8, '9'=> 9}
 
@@ -363,9 +312,9 @@ def string_to_integer(string)
 end
 
 puts string_to_integer('4321') == 4321
-string_to_integer('570') == 570
+puts string_to_integer('570') == 570
 
-
+=begin
 # String to Signed Number
 # write a method that takes a string of digits and returns the number as an integer
 # The string may have a '-' leading the nunmber or a +, return a - if it exists, otherwise positive
@@ -375,22 +324,50 @@ string_to_integer('570') == 570
 # if the character value of - is the index[0] position, return it to the final value
 # How can I remove and replace the - character? .slice! method with argument (0)
 # create a method for a value that is the + or -
+PEDAC
 
-def string_to_signed_integer(value)
-  if value[0] == '-' || value[0] =='+'
-    prefix = value.slice!(0)
-  end
-
-  if prefix == '-'
-    return -string_to_integer(value)
-  else
-    return string_to_integer(value)
-  end
+Data
+Input a strin that may or may not have a '+' or "-" prefixing the number string
+Output: if the '-' is there, a negative integer value
+  if a '+' is there, omit the '+' in return and only output the Integer value
+  
+Algorithim:
+  initiate a method definitions string_to_signed_integer passing in the parameter STRING
+  if the index value [0] contains a non numerical character + 
+  string.slice!
+  string_to_integer(string)
+  elsif string[0] == '-'
+  string = string.slice!
+  string_to_integer(string) * -1
+else
+  string_to_integer(string)
+  
+  utilize the string_to_integer method from the previous exercise
+  
+  
+  initialize a variable for first_character = string[0]
+  case first_character
+  when '-' then -
+else 
 end
+
+
+def string_to_signed_integer(string)
+  new_string = string[1..-1]
+  new_value = string_to_integer(new_string)
+  
+  case string[0]
+  when '-' then -new_value
+  when '+' then new_value
+  else string_to_integer(string)
+  end
+end  
 
 puts string_to_signed_integer('4321') == 4321
 puts string_to_signed_integer('-570') == -570
 puts string_to_signed_integer('+100') == 100
+
+
 
 # Convert a number to a string without to_s method
 
@@ -425,48 +402,37 @@ def integer_to_string(number)
   array * ''
   
 end
-=begin
 
 puts integer_to_string(4321) == '4321'
 puts integer_to_string(0) == '0'
 puts integer_to_string(5000) == '5000'
+
+=begin
+PEDAC Convert a signed number to a string in order to include the '-' sign
+prepend the string output wth + or - if > 0 or < 0
+else 0
+
+integer = intgeger <=> 0
+case integer
+when 1
+  '+' + integer_to_string(integer)
+when 0 
+  integer_to_string(integer)
+when -1
+  '-' + integer_to_string(integer)
 =end
-#Convert a signed number to a string
-
-def integer_to_string(number)
-  mod_integer = nil
-  array = []
-
-  loop do
-    mod_integer = number.divmod(10)
-    number = mod_integer[0]
-    array = array.prepend(STRING_DIGITS[mod_integer[1]])
-    break if mod_integer[0] == 0
-  end
-  
-  array * ''
-end
-
 
 def signed_integer_to_string(integer)
   case integer <=> 0
-  when 1 then "+#{integer_to_string(integer)}"
-  when -1 then "-#{integer_to_string(-integer)}" #xor and double negative!
-  else
-    integer_to_string(integer)
+  when 1
+    '+' + integer_to_string(integer)
+  when 0 
+    '0'
+  when -1
+    '-' + integer_to_string(integer)
   end
 end
 
 puts signed_integer_to_string(4321) == '+4321'
 puts signed_integer_to_string(-123) == '-123'
 puts signed_integer_to_string(0) == '0'
-
-def new_stringed(integer)
-  stringed = integer_to_string(integer.abs) # single lined
-  integer < 0 ? '-' + stringed : integer > 0 ? '+' + stringed : stringed
-end
-
-puts new_stringed(5432) == '+5432'
-puts new_stringed(-4922) == '-4922'
-puts new_stringed(0) == '0'
-
